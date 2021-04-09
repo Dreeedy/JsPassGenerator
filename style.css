@@ -2,8 +2,17 @@
     height: 100%;
 }
 
+@font-face {
+    font-family: OpenSans; /* Гарнитура шрифта */
+    src: local(OpenSans), url(fonts/open_sans/OpenSans-Regular.ttf); /* Для остальных браузеров */
+}
+
 .html-18px {
     font-size: 18px;
+}
+
+.html-18pt {
+    font-size: 18pt;
 }
 
 .body-100 {
