@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" class="html-100">
+<html lang="ru" class="html-100 html-18pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -18,22 +18,78 @@
 
     <title>Дать Артуру в пузо!</title>
 </head>
-<body class="text-center body-signin body-100">
-<!--MAIN-->
-<main class="form-signin">
-    <H2 id="time"></H2>
-    <button id="main_button" class="w-100 btn btn-lg btn-primary" onclick="punch()" type="submit">Дать в пузо Артуру!</button>
-    <H1 id="score"></H1>
+<body>
 
-<!--
-    <svg height="100" width="100">
-        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red"/>
-    </svg>
--->
+<!-- 01 - Main - Open -->
+<main>
+    <div class="container">
 
+        <!-- 01 - CheckBox - Open -->
+        <div class="row" style="background-color: antiquewhite">
+            <div class="col">
+                <input class="form-check-input" type="checkbox" id="checkLowercase" onchange="switchCheckLowercase()">
+                <label class="form-check-label" for="checkLowercase">
+                    абв..
+                </label>
+            </div>
+            <div class="col">
+                <input class="form-check-input" type="checkbox" id="checkUppercase" onchange="switchCheckUppercase()">
+                <label class="form-check-label" for="checkUppercase">
+                    АБВ..
+                </label>
+            </div>
+            <div class="col">
+                <input class="form-check-input" type="checkbox" id="checkNumbers" onchange="switchCheckNumbers()">
+                <label class="form-check-label" for="checkNumbers">
+                    123..
+                </label>
+            </div>
+            <div class="col">
+                <input class="form-check-input" type="checkbox" id="checkSpecialSymbols" onchange="switchCheckSpecialSymbols()">
+                <label class="form-check-label" for="checkSpecialSymbols">
+                    @#$..
+                </label>
+            </div>
+        </div>
+        <!-- 02 - CheckBox - Close -->
+
+        <!-- 01 - PasswordLength - Open -->
+        <div class="row" style="background-color: aquamarine">
+            <div class="col">
+                <input type="range" class="form-range" min="8" max="256" step="1" value="8" id="passwordLengthLine" oninput="getPasswordLengthNumber()">
+            </div>
+            <div class="col">
+                <div class="input-group">
+                    <input type="text" class="form-control" value="8" id="passwordLengthNumber">
+                </div>
+            </div>
+        </div>
+        <!-- 02 - PasswordLength - Close -->
+
+        <!-- 01 - PasswordField - Open -->
+        <div class="row" style="background-color: red">
+            <div class="form-group">
+                <textarea class="form-control" style="min-height: 160px" id="passwordField" rows="2"></textarea>
+            </div>
+        </div>
+        <!-- 02 - PasswordField - Close -->
+
+        <!-- 01 - Buttons - Open -->
+        <div class="row" style="background-color: green">
+            <button type="button" class="btn btn-primary col" onclick="generatePassword()">Генерировать</button>
+            <button type="button" class="btn btn-primary col" onclick="copy()">Копировать</button>
+        </div>
+        <!-- 02 - Buttons - Close -->
+
+    </div>
 </main>
-<!--Конец MAIN-->
+<!-- 02 - Main - Close -->
+
 </body>
+
+<!-- 01 - Scripts - Open -->
 <script src="jquery.js"></script>
 <script src="myJs.js"></script>
+<!-- 02 - Scripts - Close -->
+
 </html>
