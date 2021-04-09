@@ -1,56 +1,113 @@
-let i = 0;
-function punch()
-{
-    create_grid();
+/* 01 - Variables - Open */
+let lowercaseArr = [];
+let uppercaseArr = [];
+let numbersArr = [];
+let specialSymbolsArr = [];
+/* 02 - Variables - Close */
 
-    let main_button = document.getElementById('main_button');
-    main_button.textContent = 'ЕБАААААААААШ!';
+/* 01 - PageElements - Open */
+let checkLowercase = null;
+let checkUppercase = null;
+let checkNumbers = null;
+let checkSpecialSymbols = null;
+
+let passwordLengthLine = null;
+let passwordLengthNumber = null;
+let passwordField = null;
+/* 02 - PageElements - Close */
+
+window.addEventListener('load', function () {
+    loadSumbols();
+    loadPageElements();
+    checkLowercase.checked = true;
+    checkUppercase.checked = true;
+    checkNumbers.checked = true;
+    checkSpecialSymbols.checked = true;
+})
+
+function loadSumbols() {
+    lowercaseArr = loadLowercase();
+    uppercaseArr = loadUppercase();
+    numbersArr = loadNumbers();
+    specialSymbolsArr = loadSpecialsymbols();
 }
 
-function create_grid()
-{
-    //setTimeout(() => document.body.style.background = '', 10000); // вернуть назад*/
+function loadPageElements() {
+    checkLowercase = document.getElementById("checkLowercase");
+    checkUppercase = document.getElementById("checkUppercase");
+    checkNumbers = document.getElementById("checkNumbers");
+    checkSpecialSymbols = document.getElementById("checkSpecialSymbols");
 
-    let rectange = document.createElement('div');
-    rectange.id = 'punch'
-
-    rectange.style.position = 'absolute';
-    rectange.style.alignItems = 'normal';
-    rectange.style.height = '100px';
-    rectange.style.width = '100px';
-    rectange.style.background = 'red';
-    rectange.style.borderRadius = '50px';
-
-    rectange.style.textAlign = 'center';
-
-    rectange.onclick = function () { change_margin(rectange) };
-
-/*    rectange.style.marginTop = '-40%';// -40 40
-    rectange.style.marginLeft = '0%';// 1 94*/
-
-    let text = document.createElement('h2');
-    text.style.marginTop = '25%';
-    text.textContent = 'Пузо)';
-
-
-
-    rectange.append(text);
-
-    document.body.append(rectange);
-}
-function change_margin(myRectangle)
-{
-    myRectangle.style.marginTop = getRandomInt(-40, 40)+'%';// -40 40
-    myRectangle.style.marginLeft = getRandomInt(1, 94)+'%';// 1 94
-
-    let score = document.getElementById('score');
-    let bbb = 'Ударов отработано: ';
-    score.textContent = bbb+i;
-    i++;
+    passwordLengthLine = document.getElementById("passwordLengthLine");
+    passwordLengthNumber = document.getElementById("passwordLengthNumber");
+    passwordField = document.getElementById("passwordField");
 }
 
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
+function getPasswordLengthNumber() {
+    passwordLengthNumber.value = passwordLengthLine.value;
+    generatePassword();
+}
+
+function generatePassword() {
+    let localAllSymbolsArr = [];
+    if (checkLowercase.checked) {
+        localAllSymbolsArr = localAllSymbolsArr.concat(lowercaseArr);
+    }
+    if (checkUppercase.checked) {
+        localAllSymbolsArr = localAllSymbolsArr.concat(uppercaseArr);
+    }
+    if (checkNumbers.checked) {
+        localAllSymbolsArr = localAllSymbolsArr.concat(numbersArr);
+    }
+    if (checkSpecialSymbols.checked) {
+        localAllSymbolsArr = localAllSymbolsArr.concat(specialSymbolsArr);
+    }
+
+    let newPassword = '';
+    for (let i = 0; i < passwordLengthNumber.value; i++) {
+        let newNumber = randomInteger(0, localAllSymbolsArr.length-1);
+        newPassword += localAllSymbolsArr[newNumber];
+    }
+
+    passwordField.value = newPassword;
+}
+
+function randomInteger(min, max) {
+    // получить случайное число от (min-0.5) до (max+0.5)
+    let rand = min - 0.5 + Math.random() * (max - min + 1);
+    return Math.round(rand);
+}
+
+function copy() {
+    passwordField.select();
+    document.execCommand("copy");
+}
+
+function switchCheckLowercase() {
+
+}
+function switchCheckUppercase() {
+
+}
+function switchCheckNumbers() {
+
+}
+function switchCheckSpecialSymbols() {
+
+}
+
+function loadLowercase() {
+    return ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+}
+
+function loadUppercase() {
+    return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+}
+
+function loadNumbers() {
+    return ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+}
+
+function loadSpecialsymbols() {
+    return ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '}', '[', ']', '\\', '|', ':', ';', '\"', '\'', '<', '>', ',', '.', '/', '?'];
 }
