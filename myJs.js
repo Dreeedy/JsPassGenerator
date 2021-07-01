@@ -16,6 +16,8 @@ let passwordLengthNumber = null;
 let passwordField = null;
 /* 02 - PageElements - Close */
 
+// hello
+
 window.addEventListener('load', function () {
     loadSumbols();
     loadPageElements();
@@ -65,7 +67,7 @@ function generatePassword() {
 
     let newPassword = '';
     for (let i = 0; i < passwordLengthNumber.value; i++) {
-        let newNumber = randomInteger(0, localAllSymbolsArr.length-1);
+        let newNumber = randomInteger(0, localAllSymbolsArr.length - 1);
         newPassword += localAllSymbolsArr[newNumber];
     }
 
@@ -83,17 +85,10 @@ function copy() {
     document.execCommand("copy");
 }
 
-function switchCheckLowercase() {
-
-}
-function switchCheckUppercase() {
-
-}
-function switchCheckNumbers() {
-
-}
-function switchCheckSpecialSymbols() {
-
+function switchCheckBoxes() {
+    if (!checkLowercase.checked && !checkUppercase.checked && !checkNumbers.checked && !checkSpecialSymbols.checked) {
+        checkLowercase.checked = true;
+    }
 }
 
 function loadLowercase() {
