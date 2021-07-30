@@ -16,7 +16,7 @@ let passwordLengthNumber = null;
 let passwordField = null;
 /* 02 - PageElements - Close */
 
-// hello
+
 
 window.addEventListener('load', function () {
     loadSumbols();
@@ -25,6 +25,8 @@ window.addEventListener('load', function () {
     checkUppercase.checked = true;
     checkNumbers.checked = true;
     checkSpecialSymbols.checked = true;
+
+    generatePassword();
 })
 
 function loadSumbols() {
@@ -63,6 +65,10 @@ function generatePassword() {
     }
     if (checkSpecialSymbols.checked) {
         localAllSymbolsArr = localAllSymbolsArr.concat(specialSymbolsArr);
+    }
+
+    if (passwordLengthNumber.value > 256) {
+        passwordLengthNumber.value = 256; // потому что нельзя больше 256 символов
     }
 
     let newPassword = '';

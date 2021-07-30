@@ -1,5 +1,8 @@
 <!doctype html>
-<html lang="ru" class="html-100 html-18pt">
+<html lang="ru" class="html-100 html-18pt body-black container6">
+
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -12,80 +15,76 @@
 
     <!--Подключение CSS-->
     <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <!--Конец подключения CSS-->
 
     <title>Генератор паролей</title>
 </head>
-<body>
 
+
+
+<body class="container7">
 <!-- 01 - Main - Open -->
-<main>
-    <div class="container">
-
-        <!-- 01 - CheckBox - Open -->
-        <div class="row" style="background-color: antiquewhite">
-            <div class="col">
-                <input class="form-check-input" type="checkbox" id="checkLowercase" onchange="switchCheckBoxes()">
-                <label class="form-check-label" for="checkLowercase">
-                    abc..
-                </label>
-            </div>
-            <div class="col">
-                <input class="form-check-input" type="checkbox" id="checkUppercase" onchange="switchCheckBoxes()">
-                <label class="form-check-label" for="checkUppercase">
-                    ABC..
-                </label>
-            </div>
-            <div class="col">
-                <input class="form-check-input" type="checkbox" id="checkNumbers" onchange="switchCheckBoxes()">
-                <label class="form-check-label" for="checkNumbers">
-                    123..
-                </label>
-            </div>
-            <div class="col">
-                <input class="form-check-input" type="checkbox" id="checkSpecialSymbols" onchange="switchCheckBoxes()">
-                <label class="form-check-label" for="checkSpecialSymbols">
-                    @#$..
-                </label>
-            </div>
-        </div>
-        <!-- 02 - CheckBox - Close -->
-
-        <!-- 01 - PasswordLength - Open -->
-        <div class="row" style="background-color: aquamarine">
-            <div class="col">
-                <input type="range" class="form-range" min="8" max="256" step="1" value="8" id="passwordLengthLine" oninput="getPasswordLengthNumber()">
-            </div>
-            <div class="col">
-                <div class="input-group">
-                    <input type="text" class="form-control" value="8" id="passwordLengthNumber">
+    <main class="">
+        <fieldset class="">
+            <legend>[ Password generator ]</legend>
+            <!-- 01 - CheckBox - Open -->
+            <div>
+                <div>
+                    <input class="myCheckBox" type="checkbox" id="checkLowercase" onchange="switchCheckBoxes()">
+                    <label class="checkBoxLabel" for="checkLowercase">
+                        abc..
+                    </label>
+                </div>
+                <div>
+                    <input class="myCheckBox" type="checkbox" id="checkUppercase" onchange="switchCheckBoxes()">
+                    <label class="checkBoxLabel" for="checkUppercase">
+                        ABC..
+                    </label>
+                </div>
+                <div>
+                    <input class="myCheckBox" type="checkbox" id="checkNumbers" onchange="switchCheckBoxes()">
+                    <label class="checkBoxLabel" for="checkNumbers">
+                        123..
+                    </label>
+                </div>
+                <div>
+                    <input class="myCheckBox" type="checkbox" id="checkSpecialSymbols" onchange="switchCheckBoxes()">
+                    <label class="checkBoxLabel" for="checkSpecialSymbols">
+                        @#$..
+                    </label>
                 </div>
             </div>
-        </div>
-        <!-- 02 - PasswordLength - Close -->
-
-        <!-- 01 - PasswordField - Open -->
-        <div class="row" style="background-color: red">
-            <div class="form-group">
-                <textarea class="form-control" style="min-height: 160px" id="passwordField" rows="4"></textarea>
+            <span style="margin-top: 2px;" class="separator">********************************************************</span>
+            <!-- 02 - CheckBox - Close -->
+            <!-- 01 - PasswordLength - Open -->
+            <div>
+                <div style="font-size: 0;">
+                    <input type="range" min="8" max="256" step="2" value="8" id="passwordLengthLine" oninput="getPasswordLengthNumber()">
+                </div>
+                <div>
+                    <input type="number" min="8" max="256" step="2" class="inputText" value="8" id="passwordLengthNumber">
+                </div>
             </div>
-        </div>
-        <!-- 02 - PasswordField - Close -->
-
-        <!-- 01 - Buttons - Open -->
-        <div class="row" style="background-color: green">
-            <button type="button" class="btn btn-primary col" onclick="generatePassword()">Генерировать</button>
-            <button type="button" class="btn btn-primary col" onclick="copy()">Копировать</button>
-        </div>
-        <!-- 02 - Buttons - Close -->
-
-    </div>
-</main>
+            <!-- 02 - PasswordLength - Close -->
+            <!-- 01 - PasswordField - Open -->
+            <span class="separator">********************************************************</span>
+            <div>
+                <textarea class="passwordTextarea" id="passwordField" contenteditable="true" spellcheck="false"></textarea>
+            </div>
+            <span class="separator">********************************************************</span>
+            <!-- 02 - PasswordField - Close -->
+            <!-- 01 - Buttons - Open -->
+            <div>
+                <button type="button" class="myButton" onclick="generatePassword()">[ Generate() ]</button>
+                <button type="button" class="myButton" onclick="copy()">[ Copy() ]</button>
+            </div>
+            <!-- 02 - Buttons - Close -->
+        </fieldset>      
+    </main>
 <!-- 02 - Main - Close -->
-
 </body>
+
+
 
 <!-- 01 - Scripts - Open -->
 <script src="jquery.js"></script>
