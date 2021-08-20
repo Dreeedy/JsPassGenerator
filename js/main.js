@@ -167,8 +167,11 @@ function generateRandomInteger(min, max) {
 // копирует пароль в буфер обмена
 function copy() {
 
-    passwordField.select();
-    document.execCommand("copy");
+    // if Clipboard API available
+    if (navigator.clipboard) {
+
+        navigator.clipboard.writeText(passwordField.value);
+      }
 }
 function switchCheckBoxes() {
 
