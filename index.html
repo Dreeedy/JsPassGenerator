@@ -53,12 +53,6 @@
                         @#$..
                     </label>
                 </div>
-                <div>
-                    <input class="myCheckBox" type="checkbox" id="checkSpecialUnicleSymbols">
-                    <label class="checkBoxLabel" for="checkSpecialUnicleSymbols">
-                        Secure
-                    </label>
-                </div>
             </div>
             <span style="margin-top: 2px;" class="separator">********************************************************</span>
             <!-- 02 - CheckBox - Close -->
@@ -68,7 +62,7 @@
                     <input type="range" min="8" max="256" step="2" value="8" id="passwordLengthLine" oninput="getPasswordLengthNumber()">
                 </div>
                 <div>
-                    <input type="number" min="8" max="256" step="2" class="inputText" value="8" id="passwordLengthNumber">
+                    <input type="number" min="8" max="256" step="2" class="inputText" value="8" id="passwordLengthNumber" onchange="getPasswordLengthLine()">
                 </div>
             </div>
             <!-- 02 - PasswordLength - Close -->

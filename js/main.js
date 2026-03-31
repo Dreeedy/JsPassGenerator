@@ -1,17 +1,15 @@
-/* 01 - Variables - Open */
-const MAX_PASSWORD_LENGHT = 256;
-const MAX_COUNT_DUPLICATES = 27;
-
-
+﻿/* 01 - Variables - Open */
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_PASSWORD_LENGTH = 256;
+const DEFAULT_PASSWORD_LENGTH = 8;
+const PASSWORD_LENGTH_STEP = 2;
+const CRYPTO_RANGE = 0x100000000;
 
 let lowercaseArr = [];
 let uppercaseArr = [];
 let numbersArr = [];
 let specialSymbolsArr = [];
 let localAllCharsArr = [];
-
-let newPassword = '';
-let duplicatesCount = 0;
 /* 02 - Variables - Close */
 
 /* 01 - PageElements - Open */
@@ -19,7 +17,6 @@ let checkLowercase = null;
 let checkUppercase = null;
 let checkNumbers = null;
 let checkSpecialSymbols = null;
-let checkSpecialUnicleSymbols = null;
 
 let passwordLengthLine = null;
 let passwordLengthNumber = null;
@@ -30,18 +27,18 @@ let passwordField = null;
 
 window.addEventListener('load', function () {
 
-    loadSumbols();
+    loadSymbols();
     loadPageElements();
 
     checkLowercase.checked = true;
     checkUppercase.checked = true;
     checkNumbers.checked = true;
     checkSpecialSymbols.checked = true;
-    checkSpecialUnicleSymbols.checked = true;    
 
+    syncPasswordLengthInputs(DEFAULT_PASSWORD_LENGTH);
     generatePassword();
-})
-function loadSumbols() {
+});
+function loadSymbols() {
 
     lowercaseArr = loadLowercase();
     uppercaseArr = loadUppercase();
@@ -54,7 +51,6 @@ function loadPageElements() {
     checkUppercase = document.getElementById("checkUppercase");
     checkNumbers = document.getElementById("checkNumbers");
     checkSpecialSymbols = document.getElementById("checkSpecialSymbols");
-    checkSpecialUnicleSymbols = document.getElementById("checkSpecialUnicleSymbols");
 
     passwordLengthLine = document.getElementById("passwordLengthLine");
     passwordLengthNumber = document.getElementById("passwordLengthNumber");
@@ -65,113 +61,145 @@ function getPasswordLengthNumber() {
     passwordLengthNumber.value = passwordLengthLine.value;
     generatePassword();
 }
+function getPasswordLengthLine() {
+
+    generatePassword();
+}
 function generatePassword() {
 
-    newPassword = '';
-    localAllCharsArr = [];  
-    
+    const selectedCharGroups = getSelectedCharGroups();
+    const normalizedPasswordLength = normalizePasswordLength(passwordLengthNumber.value, selectedCharGroups.length);
+    const passwordChars = [];
+
+    syncPasswordLengthInputs(normalizedPasswordLength);
+
+    for (const charGroup of selectedCharGroups) {
+
+        passwordChars.push(getNewChar(charGroup));
+    }
+
+    while (passwordChars.length < normalizedPasswordLength) {
+
+        passwordChars.push(getNewChar(localAllCharsArr));
+    }
+
+    shuffleArray(passwordChars);
+    passwordField.value = passwordChars.join('');
+}
+function getSelectedCharGroups() {
+
+    const selectedCharGroups = [];
+    localAllCharsArr = [];
+
     if (checkLowercase.checked) {
 
+        selectedCharGroups.push(lowercaseArr);
         localAllCharsArr = localAllCharsArr.concat(lowercaseArr);
     }
     if (checkUppercase.checked) {
 
+        selectedCharGroups.push(uppercaseArr);
         localAllCharsArr = localAllCharsArr.concat(uppercaseArr);
     }
     if (checkNumbers.checked) {
 
+        selectedCharGroups.push(numbersArr);
         localAllCharsArr = localAllCharsArr.concat(numbersArr);
     }
     if (checkSpecialSymbols.checked) {
 
+        selectedCharGroups.push(specialSymbolsArr);
         localAllCharsArr = localAllCharsArr.concat(specialSymbolsArr);
     }
 
-    // пароль не может быть длинее чем MAX_PASSWORD_LENGHT
-    if (passwordLengthNumber.value > MAX_PASSWORD_LENGHT) {
+    if (selectedCharGroups.length === 0) {
 
-        passwordLengthNumber.value = MAX_PASSWORD_LENGHT; 
+        checkLowercase.checked = true;
+        selectedCharGroups.push(lowercaseArr);
+        localAllCharsArr = localAllCharsArr.concat(lowercaseArr);
     }
 
-    // генерация no secure пароля
-    for (let i = 0; i < passwordLengthNumber.value; i++) {
-
-        newPassword += getNewChar();
-    }
-
-    // вычисление кол-ва допустимых дубликатов
-    for (var i = 1; i < MAX_COUNT_DUPLICATES; i++) {
-
-        if (newPassword.length <= (localAllCharsArr.length * i)) {
-
-            duplicatesCount = i;
-            break;
-        }
-    }  
-
-    // генерация secure пароля
-    if (checkSpecialUnicleSymbols.checked == true) {
-
-        minimizeDuplicatesCount();
-    }   
-
-    passwordField.value = newPassword;
+    return selectedCharGroups;
 }
-// заменяет повторяющиеся символы на новые
-function minimizeDuplicatesCount() {
- 
-    for (let firstChar of newPassword) {
+function normalizePasswordLength(passwordLengthValue, minimumLength = MIN_PASSWORD_LENGTH) {
 
-        let duplicatesfound = 0;
+    let normalizedPasswordLength = Number.parseInt(passwordLengthValue, 10);
+    const effectiveMinimumLength = Math.max(MIN_PASSWORD_LENGTH, minimumLength);
 
-        let secondIndex = 0;
-        for (let secondChar of newPassword) {
+    if (!Number.isFinite(normalizedPasswordLength)) {
 
-            if (secondChar == firstChar) {
-
-                duplicatesfound++;
-
-                if (duplicatesfound > duplicatesCount) {
-
-                    let newChar = getNewChar();
-
-                    // заменяю старый символ на новый
-                    newPassword = setCharAt(newPassword, secondIndex, newChar);
-                    duplicatesfound = 0;
-                    minimizeDuplicatesCount();
-                }
-            }
-            secondIndex++;
-        }        
+        normalizedPasswordLength = DEFAULT_PASSWORD_LENGTH;
     }
-}
-function getNewChar() {
 
-    let newNumber = generateRandomInteger(0, localAllCharsArr.length - 1);
-    let newChar = localAllCharsArr[newNumber];
+    normalizedPasswordLength = Math.min(MAX_PASSWORD_LENGTH, Math.max(effectiveMinimumLength, normalizedPasswordLength));
+
+    if (normalizedPasswordLength % PASSWORD_LENGTH_STEP !== 0) {
+
+        normalizedPasswordLength++;
+    }
+
+    if (normalizedPasswordLength > MAX_PASSWORD_LENGTH) {
+
+        normalizedPasswordLength = MAX_PASSWORD_LENGTH;
+    }
+
+    return normalizedPasswordLength;
+}
+function syncPasswordLengthInputs(passwordLength) {
+
+    passwordLengthLine.value = passwordLength;
+    passwordLengthNumber.value = passwordLength;
+}
+function getNewChar(charArr) {
+
+    let newNumber = generateRandomInteger(charArr.length);
+    let newChar = charArr[newNumber];
 
     return newChar;
 }
-// заменяет символ в строке и возвращает новую строку
-function setCharAt(str, index, chr) {
+function shuffleArray(charArr) {
 
-    if (index > str.length - 1) return str;
-    return str.substring(0, index) + chr + str.substring(index + 1);
+    for (let i = charArr.length - 1; i > 0; i--) {
+
+        let newIndex = generateRandomInteger(i + 1);
+        [charArr[i], charArr[newIndex]] = [charArr[newIndex], charArr[i]];
+    }
 }
-// получить случайное число от (min-0.5) до (max+0.5)
-function generateRandomInteger(min, max) {
-    
-    let rand = min - 0.5 + Math.random() * (max - min + 1);
-    return Math.round(rand);
+// РїРѕР»СѓС‡РёС‚СЊ РєСЂРёРїС‚РѕСЃС‚РѕР№РєРѕРµ СЃР»СѓС‡Р°Р№РЅРѕРµ С‡РёСЃР»Рѕ РѕС‚ 0 РґРѕ (maxExclusive - 1)
+function generateRandomInteger(maxExclusive) {
+
+    if (!Number.isInteger(maxExclusive) || maxExclusive <= 0) {
+
+        throw new Error('Character pool must contain at least one symbol.');
+    }
+
+    const cryptoApi = globalThis.crypto;
+
+    if (!cryptoApi || typeof cryptoApi.getRandomValues !== 'function') {
+
+        throw new Error('Web Crypto API is unavailable in this browser.');
+    }
+
+    let randomValues = new Uint32Array(1);
+    let maxUnbiasedValue = CRYPTO_RANGE - (CRYPTO_RANGE % maxExclusive);
+    let randomNumber = 0;
+
+    do {
+
+        cryptoApi.getRandomValues(randomValues);
+        randomNumber = randomValues[0];
+    } while (randomNumber >= maxUnbiasedValue);
+
+    return randomNumber % maxExclusive;
 }
-// копирует пароль в буфер обмена
+// РєРѕРїРёСЂСѓРµС‚ РїР°СЂРѕР»СЊ РІ Р±СѓС„РµСЂ РѕР±РјРµРЅР°
 function copy() {
 
     // if Clipboard API available
     if (navigator.clipboard) {
 
         navigator.clipboard.writeText(passwordField.value);
-      }
+    }
 }
 function switchCheckBoxes() {
 
